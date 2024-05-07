@@ -31,7 +31,7 @@ async def process_start_command(message: Message) -> None:
         name = message.from_user.first_name
     else:
         name = 'друг'
-    await message.answer(text=f'Привет {name}! {MESSAGE_TEXT["text0"]}')
+    await message.answer(text=f'Привет, {name}! {MESSAGE_TEXT["text0"]}')
     # file_id='BAACAgIAAxkBAAIJfmXCWeOP8JI0iwxvRLdSawpd77ZzAAKiOwACwrwYSudQ-fpH92fLNAQ'
     # await message.answer_video(video=file_id)
     keyboard = keyboard_1()

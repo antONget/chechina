@@ -43,3 +43,9 @@ def affirmacia_keyboard():
         inline_keyboard=[[button1, button2, button3]]
     )
     return keyboard
+
+
+def keyboards_subscription():
+    button_1 = InlineKeyboardButton(text='Я подписался', callback_data='subscription')
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[button_1]], )
+    return keyboard

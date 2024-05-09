@@ -7,7 +7,7 @@ from services.main import codewealth, affirmacia
 import time
 from aiogram_calendar import DialogCalendar, get_user_locale, DialogCalendarCallback
 from aiogram.filters.callback_data import CallbackData
-from keyboards.user_keyboards import keyboard_1, affirmacia_keyboard
+from keyboards.user_keyboards import keyboard_1, affirmacia_keyboard, keyboards_subscription
 from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.fsm.context import FSMContext
 
@@ -24,18 +24,45 @@ class Form(StatesGroup):
 
 # Этот handler срабатывает на команду /start
 @router.message(CommandStart())
-async def process_start_command(message: Message) -> None:
+async def process_start_command(message: Message, bot: Bot) -> None:
     append_name_start(message.chat.id)
     user_dict[message.chat.id] = ''
     if message.from_user.first_name is not None:
         name = message.from_user.first_name
     else:
         name = 'друг'
-    await message.answer(text=f'Привет, {name}! {MESSAGE_TEXT["text0"]}')
-    # file_id='BAACAgIAAxkBAAIJfmXCWeOP8JI0iwxvRLdSawpd77ZzAAKiOwACwrwYSudQ-fpH92fLNAQ'
-    # await message.answer_video(video=file_id)
-    keyboard = keyboard_1()
-    await message.answer(text=MESSAGE_TEXT['text6'], reply_markup=keyboard)
+    await message.answer(text=f'Привет {name}! {MESSAGE_TEXT["text0"]}')
+
+    await message.answer(text=f'Обязательное условие, ты должна быть подписана на мой канал'
+                              f' <a href="@chechinaclub">@chechinaclub</a>',
+                         disable_web_page_preview=True,
+                         parse_mode='HTML')
+
+    user_channel_status = await bot.get_chat_member(chat_id="@chechinaclub", user_id=message.from_user.id)
+    print(user_channel_status)
+    if user_channel_status.status != 'left':
+        keyboard = keyboard_1()
+        await message.answer(text=MESSAGE_TEXT['text6'], reply_markup=keyboard)
+    else:
+        await message.answer(
+            text=f'Обязательное условие, ты должна быть подписана на мой канал '
+                 f'<a href="@chechinaclub">@chechinaclub</a>',
+            reply_markup=keyboards_subscription(),
+            parse_mode='html')
+
+
+@router.callback_query(F.data == 'subscription')
+async def process_press_subscription(callback: CallbackQuery, bot: Bot, state: FSMContext):
+    user_channel_status = await bot.get_chat_member(chat_id="@chechinaclub", user_id=callback.message.chat.id)
+    print(user_channel_status)
+    if user_channel_status.status != 'left':
+        keyboard = keyboard_1()
+        await callback.message.answer(text=MESSAGE_TEXT['text6'], reply_markup=keyboard)
+    else:
+        await callback.message.answer(text=f'Обязательное условие, ты должна быть подписана на мой канал '
+                                           f'<a href="@chechinaclub">@chechinaclub</a>',
+                                      reply_markup=keyboards_subscription(),
+                                      parse_mode='HTML')
 
 
 @router.message(F.voice, StateFilter(Form.affirmacia))

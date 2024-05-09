@@ -77,7 +77,7 @@ async def process_dialog_calendar(callback_query: CallbackQuery, callback_data: 
     selected, date = await DialogCalendar().process_selection(callback_query, callback_data)
     if selected:
         code = codewealth(str(date.strftime("%Y-%m-%d")))
-        await callback_query.message.answer(text=f'Вы указали: {date.strftime("%d/%m/%Y")}, Ваш код богатства {code}')
+        await callback_query.message.answer(text=f'Ты указала: {date.strftime("%d/%m/%Y")}, Твой код богатства {code}')
         time.sleep(5)
         await callback_query.message.answer(text=MESSAGE_TEXT['text8'])
         # time.sleep(20)

@@ -44,8 +44,8 @@ async def process_start_command(message: Message, bot: Bot,  state: FSMContext) 
     file_path = (await bot.get_file(file_id)).file_path
     await bot.download_file(file_path, f"data/{message.chat.id}voice.ogg")
     link = "<a href='https://t.me/AntonPon0marev'>тех.поддержку.</a>"
-    await message.answer(text=f'Немного подождите, ваша аффирмация обрабатывается...⏳\n Если время ожидания составит'
-                              f' более 1 мин, напишите в {link}', parse_mode='HTML', disable_web_page_preview=True)
+    await message.answer(text=f'Немного подожди, твоя аффирмация обрабатывается...⏳\n Если время ожидания составит'
+                              f' более 1 мин, напиши в {link}', parse_mode='HTML', disable_web_page_preview=True)
     affirmacia(id=message.chat.id, back=user_dict[message.chat.id])
     audio = FSInputFile(path=f"data/{message.chat.id}aff.mp3")
     await bot.send_message(843554518, text=f'аффирмация для {message.chat.id} создана')
